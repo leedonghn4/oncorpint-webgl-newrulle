@@ -1,0 +1,40 @@
+<html>
+ 
+<head>
+ 
+<title>Qtip content</title>
+ 
+<script type="text/javascript" src="jquery.qtip.custom/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="jquery.qtip.custom/jquery.qtip.min.js"></script>
+ 
+ <link type="text/css" rel="stylesheet" href="jquery.qtip.custom/jquery.qtip.css" />
+// Create the first tooltip
+ 
+<script type="text/javascript">
+// Create the tooltips only on document load
+$(document).ready(function() 
+{
+   // By suppling no content attribute, the library uses each elements title attribute by default
+   $('#content a[href]').qtip({
+      // Simply use an HTML img tag within the HTML string
+      content: 'i am a qtip'
+   });
+});
+ 
+</script>
+ 
+ 
+</head>
+ 
+<body>
+ 
+ 
+ 
+<div id="content"><a href="#">i am a qtip <img src="images/smilies/smile.gif" style="vertical-align: middle;" border="0" alt="Smile" title="Smile" /></a></div>
+ 
+ 
+ 
+ 
+ 
+</body>
+</html>
