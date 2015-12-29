@@ -312,9 +312,7 @@ function webglFunction(gl,canvaselement,bascisparameters){
 
 			this.getPosition = function(winX, winY)
 			{
-				var viewportArray = [
-				0, 0, self.gl.viewportWidth, self.gl.viewportHeight
-				];
+				var viewportArray = [ 0, 0, self.gl.viewportWidth, self.gl.viewportHeight ];
 
 				// The results of the operation will be stored in this array.
 				var modelPointArrayResults = [0.0, 0.0, 0.0];
@@ -356,19 +354,19 @@ function webglFunction(gl,canvaselement,bascisparameters){
 			            self.datas.rectanglevertexdata[(XindexMouse+i*self.bascisparameters.rowNum)* 6 * 3 + 15] = left;  
 			        }
 
-			        var left= (self.bascisparameters.marginX + self.bascisparameters.recWidth) * XindexMouse + self.bascisparameters.marginX - self.bascisparameters.scalepercentage * self.bascisparameters.recWidth;
+			        var left = (self.bascisparameters.marginX + self.bascisparameters.recWidth) * XindexMouse + self.bascisparameters.marginX - self.bascisparameters.scalepercentage * self.bascisparameters.recWidth;
 			        var right = (self.bascisparameters.marginX + self.bascisparameters.recWidth) * XindexMouse + self.bascisparameters.recWidth + self.bascisparameters.marginX + self.bascisparameters.scalepercentage * self.bascisparameters.recWidth;
 			        var low = (self.bascisparameters.marginY + self.bascisparameters.recHeight) * YindexMouse + self.bascisparameters.marginY;
 			        var high = (self.bascisparameters.marginY + self.bascisparameters.recHeight) * YindexMouse + self.bascisparameters.marginY + self.bascisparameters.recHeight;
 
 		            self.datas.wirevertexdata = new Float32Array([right, high, self.bascisparameters.depth+0.01,
 		            											  left,  high, self.bascisparameters.depth+0.01,
-	            											      right, low,  self.bascisparameters.depth+0.01,
-		            											  left,  low,  self.bascisparameters.depth+0.01,
+	            											      right, low ,  self.bascisparameters.depth+0.01,
+		            											  left,  low ,  self.bascisparameters.depth+0.01,
 		            											  right, high, self.bascisparameters.depth+0.01,
-		            											  right, low,  self.bascisparameters.depth+0.01,
+		            											  right, low ,  self.bascisparameters.depth+0.01,
 		            											  left,  high, self.bascisparameters.depth+0.01,
-		            											  left,  low,  self.bascisparameters.depth+0.01]);
+		            											  left,  low ,  self.bascisparameters.depth+0.01]);
 
 			        self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer = self.gl.createBuffer();
 			        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer);
@@ -537,7 +535,7 @@ function webglFunction(gl,canvaselement,bascisparameters){
         		this.initBuffers(datas);
         		this.datas = datas;
 
-        		this.origindatas = jQuery.extend(true, {}, datas);
+        		this.origindatas = jQuery.extend(true, {}, datas); //make copy of the data without change the original data    jQuery.extend() function is very slow need change a faster method
         		document.onmousemove = this.handleMouseMove;
         		this.drawScene();
 			};
@@ -1664,7 +1662,7 @@ var OncoprintSVGCellView = (function() {
 			elt.parentNode.removeChild(elt);
 		}
 		
-		var y = cell_view.getTrackTop(model, track_id) + model.getTrackPadding(track_id);
+		var y = cell_view.getTrackTop(model, track_id);
 		// Now y is the top of the cells
 		var cell_width = model.getCellWidth();
 		var cell_padding = model.getCellPadding();
@@ -1693,9 +1691,9 @@ var OncoprintSVGCellView = (function() {
 		var	bascisparameters = {
 		    		colNum:1,
 		    		squarecolNum:40,
-		    		rowNum:1,
-    			    marginX: 5.0,
-				    marginY: 5.0,
+		    		rowNum:shape_list_list.length,
+    			    marginX: cell_padding,
+				    marginY: 0.0,
 				    recWidth: 10.0,
 				    recHeight: 20.0,
 				    squareHeigth: 7.0,
@@ -1716,10 +1714,10 @@ var OncoprintSVGCellView = (function() {
     			var depth = 0.01;
     			var canvasHeight = document.getElementById("canvas").height;
     			var colorvalue = ((shape_list_list[i][0].fill.split("(")[1]).split(")")[0]).split(",");
-    			var left = (Number(shape_list_list[i][0].width) + cell_padding) * i;
-    			var right = (Number(shape_list_list[i][0].width)+ cell_padding) * i + Number(shape_list_list[i][0].width);
-    			var low = canvasHeight - (0 + Number(shape_list_list[i][0].y)); // on canvas the Y cooridate is from up to down 
-    			var high = canvasHeight - (0 + Number(shape_list_list[i][0].y) + Number(shape_list_list[i][0].height));
+    			var left = bascisparameters.marginX + (Number(shape_list_list[i][0].width) + cell_padding) * i;
+    			var right = bascisparameters.marginX + (Number(shape_list_list[i][0].width)+ cell_padding) * i + Number(shape_list_list[i][0].width);
+    			var low = canvasHeight - (y + Number(shape_list_list[i][0].y)); // on canvas the Y cooridate is from up to down 
+    			var high = canvasHeight - (y + Number(shape_list_list[i][0].y) + Number(shape_list_list[i][0].height));
 
     			rectanglevertices.push(left,  low,  depth);
     			rectanglevertices.push(right, low,  depth);
@@ -1794,9 +1792,11 @@ var OncoprintSVGCellView = (function() {
 	
 	var renderTracks = function(cell_view, model) {
 		var tracks = model.getTracks();
-		for (var i=0; i<tracks.length; i++) {
-			renderTrack(cell_view, model, tracks[i]);
-		}
+		// for (var i=0; i<tracks.length; i++) {
+		// 	renderTrack(cell_view, model, tracks[i]);
+		// }
+		
+		renderTrack(cell_view, model, tracks[1]);
 	}
 	
 	OncoprintSVGCellView.prototype.addTrack = function(model, track_id) {

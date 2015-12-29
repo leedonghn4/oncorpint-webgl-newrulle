@@ -54,12 +54,12 @@ function webglFunction(gl,canvaselement,bascisparameters){
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.squareVertexPositionBuffer);				        
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.squarevertexdata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.squareVertexPositionBuffer.itemSize = 3;
-			        this.vertexpositionandcolorbuffers.squareVertexPositionBuffer.numItems = 6 * this.bascisparameters.rowNum * this.bascisparameters.squarecolNum;
+			        this.vertexpositionandcolorbuffers.squareVertexPositionBuffer.numItems = datas.squarevertexdata.length/3;
 
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.squareVertexColorBuffer);
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.squarecolordata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.squareVertexColorBuffer.itemSize = 4;
-			        this.vertexpositionandcolorbuffers.squareVertexColorBuffer.numItems = 6 * this.bascisparameters.rowNum  * this.bascisparameters.squarecolNum;
+			        this.vertexpositionandcolorbuffers.squareVertexColorBuffer.numItems = datas.squarecolordata.length/4;
 				}
 
 				//triangle vertex and color
@@ -68,12 +68,12 @@ function webglFunction(gl,canvaselement,bascisparameters){
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.triangleVertexPositionBuffer);				        
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.trianglevertexdata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.triangleVertexPositionBuffer.itemSize = 3;
-			        this.vertexpositionandcolorbuffers.triangleVertexPositionBuffer.numItems = 6 * this.bascisparameters.rowNum * 4;
+			        this.vertexpositionandcolorbuffers.triangleVertexPositionBuffer.numItems = datas.trianglevertexdata.length/3;
 
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.triangleVertexColorBuffer);
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.trianglecolordata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.triangleVertexColorBuffer.itemSize = 4;
-			        this.vertexpositionandcolorbuffers.triangleVertexColorBuffer.numItems = 6 * this.bascisparameters.rowNum  * 4;
+			        this.vertexpositionandcolorbuffers.triangleVertexColorBuffer.numItems = datas.trianglecolordata.length/4;
 				}
 
 				//ellipse vertex and color
@@ -82,12 +82,12 @@ function webglFunction(gl,canvaselement,bascisparameters){
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer);				        
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.ellipsevertexdata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer.itemSize = 3;
-			        this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer.numItems = 6 * this.bascisparameters.rowNum * 2;
+			        this.vertexpositionandcolorbuffers.ellipseVertexPositionBuffer.numItems = datas.ellipsevertexdata.length/3;
 
 			        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer);
 			        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(datas.ellipsecolordata), this.gl.STATIC_DRAW);
 			        this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer.itemSize = 4;
-			        this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer.numItems = 6 * this.bascisparameters.rowNum  * 2;
+			        this.vertexpositionandcolorbuffers.ellipseVertexColorBuffer.numItems = datas.ellipsecolordata.length/4;
 				}
 		    };
 
@@ -311,9 +311,7 @@ function webglFunction(gl,canvaselement,bascisparameters){
 
 			this.getPosition = function(winX, winY)
 			{
-				var viewportArray = [
-				0, 0, self.gl.viewportWidth, self.gl.viewportHeight
-				];
+				var viewportArray = [ 0, 0, self.gl.viewportWidth, self.gl.viewportHeight ];
 
 				// The results of the operation will be stored in this array.
 				var modelPointArrayResults = [0.0, 0.0, 0.0];
@@ -355,19 +353,19 @@ function webglFunction(gl,canvaselement,bascisparameters){
 			            self.datas.rectanglevertexdata[(XindexMouse+i*self.bascisparameters.rowNum)* 6 * 3 + 15] = left;  
 			        }
 
-			        var left= (self.bascisparameters.marginX + self.bascisparameters.recWidth) * XindexMouse + self.bascisparameters.marginX - self.bascisparameters.scalepercentage * self.bascisparameters.recWidth;
+			        var left = (self.bascisparameters.marginX + self.bascisparameters.recWidth) * XindexMouse + self.bascisparameters.marginX - self.bascisparameters.scalepercentage * self.bascisparameters.recWidth;
 			        var right = (self.bascisparameters.marginX + self.bascisparameters.recWidth) * XindexMouse + self.bascisparameters.recWidth + self.bascisparameters.marginX + self.bascisparameters.scalepercentage * self.bascisparameters.recWidth;
 			        var low = (self.bascisparameters.marginY + self.bascisparameters.recHeight) * YindexMouse + self.bascisparameters.marginY;
 			        var high = (self.bascisparameters.marginY + self.bascisparameters.recHeight) * YindexMouse + self.bascisparameters.marginY + self.bascisparameters.recHeight;
 
 		            self.datas.wirevertexdata = new Float32Array([right, high, self.bascisparameters.depth+0.01,
 		            											  left,  high, self.bascisparameters.depth+0.01,
-	            											      right, low,  self.bascisparameters.depth+0.01,
-		            											  left,  low,  self.bascisparameters.depth+0.01,
+	            											      right, low ,  self.bascisparameters.depth+0.01,
+		            											  left,  low ,  self.bascisparameters.depth+0.01,
 		            											  right, high, self.bascisparameters.depth+0.01,
-		            											  right, low,  self.bascisparameters.depth+0.01,
+		            											  right, low ,  self.bascisparameters.depth+0.01,
 		            											  left,  high, self.bascisparameters.depth+0.01,
-		            											  left,  low,  self.bascisparameters.depth+0.01]);
+		            											  left,  low ,  self.bascisparameters.depth+0.01]);
 
 			        self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer = self.gl.createBuffer();
 			        self.gl.bindBuffer(self.gl.ARRAY_BUFFER, self.vertexpositionandcolorbuffers.rectangleVertexPositionBuffer);
@@ -536,7 +534,7 @@ function webglFunction(gl,canvaselement,bascisparameters){
         		this.initBuffers(datas);
         		this.datas = datas;
 
-        		this.origindatas = jQuery.extend(true, {}, datas);
+        		this.origindatas = jQuery.extend(true, {}, datas); //make copy of the data without change the original data    jQuery.extend() function is very slow need change a faster method
         		document.onmousemove = this.handleMouseMove;
         		this.drawScene();
 			};

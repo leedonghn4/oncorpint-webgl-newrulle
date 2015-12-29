@@ -23,7 +23,7 @@ var OncoprintSVGCellView = (function() {
 			elt.parentNode.removeChild(elt);
 		}
 		
-		var y = cell_view.getTrackTop(model, track_id) + model.getTrackPadding(track_id);
+		var y = cell_view.getTrackTop(model, track_id);
 		// Now y is the top of the cells
 		var cell_width = model.getCellWidth();
 		var cell_padding = model.getCellPadding();
@@ -52,9 +52,9 @@ var OncoprintSVGCellView = (function() {
 		var	bascisparameters = {
 		    		colNum:1,
 		    		squarecolNum:40,
-		    		rowNum:1,
-    			    marginX: 5.0,
-				    marginY: 5.0,
+		    		rowNum:shape_list_list.length,
+    			    marginX: cell_padding,
+				    marginY: 0.0,
 				    recWidth: 10.0,
 				    recHeight: 20.0,
 				    squareHeigth: 7.0,
@@ -75,10 +75,10 @@ var OncoprintSVGCellView = (function() {
     			var depth = 0.01;
     			var canvasHeight = document.getElementById("canvas").height;
     			var colorvalue = ((shape_list_list[i][0].fill.split("(")[1]).split(")")[0]).split(",");
-    			var left = (Number(shape_list_list[i][0].width) + cell_padding) * i;
-    			var right = (Number(shape_list_list[i][0].width)+ cell_padding) * i + Number(shape_list_list[i][0].width);
-    			var low = canvasHeight - (0 + Number(shape_list_list[i][0].y)); // on canvas the Y cooridate is from up to down 
-    			var high = canvasHeight - (0 + Number(shape_list_list[i][0].y) + Number(shape_list_list[i][0].height));
+    			var left = bascisparameters.marginX + (Number(shape_list_list[i][0].width) + cell_padding) * i;
+    			var right = bascisparameters.marginX + (Number(shape_list_list[i][0].width)+ cell_padding) * i + Number(shape_list_list[i][0].width);
+    			var low = canvasHeight - (y + Number(shape_list_list[i][0].y)); // on canvas the Y cooridate is from up to down 
+    			var high = canvasHeight - (y + Number(shape_list_list[i][0].y) + Number(shape_list_list[i][0].height));
 
     			rectanglevertices.push(left,  low,  depth);
     			rectanglevertices.push(right, low,  depth);
@@ -153,9 +153,11 @@ var OncoprintSVGCellView = (function() {
 	
 	var renderTracks = function(cell_view, model) {
 		var tracks = model.getTracks();
-		for (var i=0; i<tracks.length; i++) {
-			renderTrack(cell_view, model, tracks[i]);
-		}
+		// for (var i=0; i<tracks.length; i++) {
+		// 	renderTrack(cell_view, model, tracks[i]);
+		// }
+		
+		renderTrack(cell_view, model, tracks[1]);
 	}
 	
 	OncoprintSVGCellView.prototype.addTrack = function(model, track_id) {
